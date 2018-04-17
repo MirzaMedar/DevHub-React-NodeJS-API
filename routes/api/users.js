@@ -24,7 +24,7 @@ router.post("/register", (req, res) => {
       });
     } else {
       var avatar = gravatar.url(req.body.email, {
-        s: "200", //Size
+        s: "200", //size
         r: "pg", // Rating
         default: "mm" // Default
       });
