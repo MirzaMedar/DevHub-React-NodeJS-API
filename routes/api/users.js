@@ -114,7 +114,6 @@ router.post("/login", (req, res) => {
 // @route GET api/users/current
 // @desc Tests bearer strategy
 // @access Private
-
 router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
