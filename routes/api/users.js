@@ -5,6 +5,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const User = require("../../models/User");
+const passport = require("passport");
+const ValidateRegisterInput = require("../../validation/register");
+
 // @route GET api/users/test
 // @desc Tests users route
 // @access Public
@@ -18,6 +21,11 @@ router.get("/test", (req, res) => {
 // @desc Register user
 // @access Public
 router.post("/register", (req, res) => {
+  const { errors, isValid } = ValidateRegisterInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({
@@ -96,5 +104,21 @@ router.post("/login", (req, res) => {
     });
   });
 });
+
+// @route GET api/users/current
+// @desc Tests bearer strategy
+// @access Private
+
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    });
+  }
+);
 
 module.exports = router;

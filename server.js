@@ -20,9 +20,11 @@ mongoose
   .then(() => console.log("MongoDB connected!"))
   .catch(error => console.log(error));
 
-app.get("/", (req, res) => {
-  res.send("Hello there");
-});
+//Use passport
+app.use(passport.initialize());
+
+//Passport config
+require("./config/passport")(passport);
 
 //use routes
 app.use("/api/users", users);
